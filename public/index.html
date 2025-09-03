@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publiczny Edytor Notion</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 24px;
+      max-width: 700px;
+    }
+    h1 {
+      margin-bottom: 8px;
+    }
+    .box {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin: 8px 0 4px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 280px;
+      padding: 12px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #m {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Publiczny Edytor Notion</h1>
+  <p>Zmiana treści strony Notion między <code>BEGIN PUBLIC EDIT</code> i <code>END PUBLIC EDIT</code>.</p>
+
+  <div class="box">
+    <label for="endpoint">Adres API:</label>
+    <input id="endpoint" type="text" placeholder="https://twoj-projekt.vercel.app/api/public-edit" />
+
+    <label for="token">Token dostępu:</label>
+    <input id="token" type="text" placeholder="Wpisz PUBLIC_EDIT_TOKEN" />
+  </div>
+
+  <label for="t">Treść do zapisania:</label>
+  <textarea id="t" placeholder="Tutaj wpisz nową treść..."></textarea>
+  <br>
+  <button id="b">Zapisz</button>
+  <p id="m"></p>
+
+  <script>
+    document.getElementById('b').onclick = async () => {
+      const content = document.getElementById('t').value;
+      const endpoint = document.getElementById('endpoint').value.trim();
+      const token = document.getElementById('token').value.trim();
+      const msg = document.getElementById('m');
+
+      if (!endpoint || !token) {
+        msg.textContent = "Podaj adres API i token.";
+        return;
+      }
+
+      msg.textContent = "Zapisywanie...";
+      try {
+        const r = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, content })
+        });
+        const data = await r.json();
+        if (data.ok) {
+          msg.textContent = "✅ Zapisano pomyślnie!";
+        } else {
+          msg.textContent = "❌ Błąd: " + (data.error || r.status);
+        }
+      } catch (e) {
+        msg.textContent = "❌ Błąd sieci: " + e.message;
+      }
+    };
+  </script>
+</body>
+</html>
