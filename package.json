@@ -1,14 +1,8 @@
 {
-  "name": "public-notion-editor",
-  "version": "1.0.0",
-  "private": true,
-  "license": "MIT",
-  "type": "module",
-  "dependencies": {
-    "@notionhq/client": "^2.2.14"
-  },
-  "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev"
+  "version": 2,
+  "functions": {
+    "api/**/*.{js,ts}": {
+      "runtime": "@vercel/node@3"
+    }
   }
 }
