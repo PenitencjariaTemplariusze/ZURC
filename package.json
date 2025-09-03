@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "dependencies": {
-    "@notionhq/client": "^2.2.14"
-  },
-  "engines": {
-    "node": "20.x"
-  }
+  "dependencies": { "@notionhq/client": "^2.2.14" },
+  "engines": { "node": "20.x" }
 }
